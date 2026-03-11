@@ -14,10 +14,30 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-hatenablog.helloWorld",
-        "title": "Hello World"
+        "command": "hatenablog.post",
+        "title": "Post to HatenaBlog"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "HatenaBlog",
+      "properties": {
+        "hatenablog.hatenaId": {
+          "type": "string",
+          "default": "",
+          "description": "Hatena ID"
+        },
+        "hatenablog.blogId": {
+          "type": "string",
+          "default": "",
+          "description": "Blog ID (ブログドメイン e.g. example.hatenablog.com)"
+        },
+        "hatenablog.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API Key"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
