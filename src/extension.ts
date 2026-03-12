@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { createHatenaClient } from './lib/client';
-import { postMarkdownDocument } from './lib/post';
+import { createHatenaClient } from '#lib/client';
+import { postMarkdownDocument } from '#lib/post';
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand('hatenablog.post', async () => {

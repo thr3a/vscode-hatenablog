@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { activate } from '../extension';
+import { activate } from '#extension';
 
 suite('Extension Test Suite', () => {
 	test('registers hatenablog.post command', async () => {

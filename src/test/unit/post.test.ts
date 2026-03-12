@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 
-import type { HatenaClient, SubmitEntryRequest } from '../../lib/client';
-import { postMarkdownDocument, validatePostInput } from '../../lib/post';
+import type { HatenaClient, SubmitEntryRequest } from '#lib/client';
+import { postMarkdownDocument, validatePostInput } from '#lib/post';
 
 class RecordingClient implements HatenaClient {
 	public readonly requests: SubmitEntryRequest[] = [];

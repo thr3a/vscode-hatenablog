@@ -7,7 +7,7 @@ import {
 	extractTitle,
 	parseFrontMatter,
 	parseResponseXml,
-} from '../../lib/hatena';
+} from '#lib/hatena';
 
 suite('hatena helpers', () => {
 	test('parseFrontMatter reads metadata and separates body', () => {

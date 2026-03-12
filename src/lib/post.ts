@@ -1,5 +1,5 @@
-import type { HatenaClient } from './client';
-import { buildFrontMatter, extractTitle, parseFrontMatter, type AtomEntry } from './hatena';
+import type { HatenaClient } from '#lib/client';
+import { buildFrontMatter, extractTitle, parseFrontMatter, type AtomEntry } from '#lib/hatena';
 
 export interface HatenablogConfig {
 	hatenaId: string;

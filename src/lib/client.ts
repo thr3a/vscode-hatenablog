@@ -1,4 +1,4 @@
-import { buildEntryXml, parseResponseXml, type AtomEntry } from './hatena';
+import { buildEntryXml, parseResponseXml, type AtomEntry } from '#lib/hatena';
 
 export interface SubmitEntryRequest {
 	hatenaId: string;
