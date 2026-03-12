@@ -24,7 +24,7 @@ class RecordingClient implements HatenaClient {
 }
 
 suite('post workflow', () => {
-	test('validatePostInput rejects non-markdown files', () => {
+	test('validatePostInput: Markdownファイル以外は拒否する', () => {
 		assert.strictEqual(
 			validatePostInput({
 				languageId: 'plaintext',
@@ -35,7 +35,7 @@ suite('post workflow', () => {
 		);
 	});
 
-	test('validatePostInput rejects missing configuration', () => {
+	test('validatePostInput: 設定が不足している場合は拒否する', () => {
 		assert.strictEqual(
 			validatePostInput({
 				languageId: 'markdown',
@@ -46,7 +46,7 @@ suite('post workflow', () => {
 		);
 	});
 
-	test('postMarkdownDocument cancels cleanly when category prompt is dismissed', async () => {
+	test('postMarkdownDocument: カテゴリ入力をキャンセルした場合は正常にキャンセルされる', async () => {
 		const client = new RecordingClient({
 			id: '1',
 			title: 'Test',
@@ -73,7 +73,7 @@ suite('post workflow', () => {
 		assert.strictEqual(client.requests.length, 0);
 	});
 
-	test('postMarkdownDocument posts new markdown and builds front matter from response', async () => {
+	test('postMarkdownDocument: 新規Markdownを投稿してレスポンスからフロントマターを構築する', async () => {
 		const client = new RecordingClient({
 			id: '17179246901363868670',
 			title: 'Posted Title',
@@ -120,7 +120,7 @@ body`,
 		});
 	});
 
-	test('postMarkdownDocument updates existing markdown with PUT semantics', async () => {
+	test('postMarkdownDocument: 既存のMarkdownをPUT形式で更新する', async () => {
 		const client = new RecordingClient({
 			id: '17179246901363868670',
 			title: '',
@@ -177,7 +177,7 @@ body`,
 		});
 	});
 
-	test('postMarkdownDocument returns client errors as user-facing messages', async () => {
+	test('postMarkdownDocument: クライアントエラーをユーザー向けメッセージとして返す', async () => {
 		const result = await postMarkdownDocument(
 			{
 				languageId: 'markdown',

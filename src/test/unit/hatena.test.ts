@@ -9,8 +9,8 @@ import {
 	parseResponseXml,
 } from '#lib/hatena';
 
-suite('hatena helpers', () => {
-	test('parseFrontMatter reads metadata and separates body', () => {
+suite('hatenaヘルパー', () => {
+	test('parseFrontMatter: メタデータを読み取り本文と分離する', () => {
 		const text = `---
 id: 17179246901363868670
 title: "test"
@@ -37,12 +37,12 @@ content`;
 		assert.strictEqual(parsed.body, '# body\ncontent');
 	});
 
-	test('parseFrontMatter returns plain body when metadata does not exist', () => {
+	test('parseFrontMatter: メタデータが存在しない場合は本文をそのまま返す', () => {
 		const body = '# title\ncontent';
 		assert.deepStrictEqual(parseFrontMatter(body), { frontMatter: null, body });
 	});
 
-	test('buildFrontMatter preserves category list formatting', () => {
+	test('buildFrontMatter: カテゴリリストのフォーマットを正しく出力する', () => {
 		const built = buildFrontMatter({
 			id: '123',
 			title: 'hello',
@@ -58,19 +58,19 @@ content`;
 		assert.match(built, /^draft_flag: false$/m);
 	});
 
-	test('extractTitle reads the first markdown heading', () => {
+	test('extractTitle: 最初のMarkdown見出しをタイトルとして読み取る', () => {
 		assert.strictEqual(extractTitle('intro\n# Actual Title\nbody'), 'Actual Title');
 		assert.strictEqual(extractTitle('plain body'), 'Untitled');
 	});
 
-	test('escapeXml escapes all reserved characters', () => {
+	test('escapeXml: すべての予約文字をエスケープする', () => {
 		assert.strictEqual(
 			escapeXml(`a&b<c>d"e'f`),
 			'a&amp;b&lt;c&gt;d&quot;e&apos;f',
 		);
 	});
 
-	test('buildEntryXml includes categories and escaped markdown content', () => {
+	test('buildEntryXml: カテゴリとエスケープ済みMarkdown内容を含むXMLを生成する', () => {
 		const xml = buildEntryXml('Hello & World', '# body <tag>', ['ubuntu', '']);
 
 		assert.match(xml, /<title>Hello &amp; World<\/title>/);
@@ -79,7 +79,7 @@ content`;
 		assert.doesNotMatch(xml, /<category term="" \/>/);
 	});
 
-	test('parseResponseXml prefers edit link entry id', () => {
+	test('parseResponseXml: editリンクからエントリIDを優先的に取得する', () => {
 		const xml = `<?xml version="1.0" encoding="utf-8"?>
 <entry xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
   <id>tag:blog.hatena.ne.jp,2026:blog-12345678901234567890-10257846132639628337</id>
