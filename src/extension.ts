@@ -1,26 +1,66 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { createHatenaClient } from './lib/client';
+import { postMarkdownDocument } from './lib/post';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	const disposable = vscode.commands.registerCommand('hatenablog.post', async () => {
+		const editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showErrorMessage('Markdownファイルを開いてください');
+			return;
+		}
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vscode-hatenablog" is now active!');
+		const config = vscode.workspace.getConfiguration('hatenablog');
+		const result = await postMarkdownDocument(
+			{
+				languageId: editor.document.languageId,
+				fullText: editor.document.getText(),
+				config: {
+					hatenaId: config.get<string>('hatenaId', ''),
+					blogId: config.get<string>('blogId', ''),
+					apiKey: config.get<string>('apiKey', ''),
+				},
+			},
+			{
+				client: createHatenaClient(fetch),
+				promptCategories: ({ defaultValue }) =>
+					vscode.window.showInputBox({
+						prompt: 'カテゴリを入力してください（カンマ区切りで複数可）',
+						value: defaultValue,
+						placeHolder: 'linux,ubuntu',
+					}),
+				now: () => new Date(),
+			},
+		);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('vscode-hatenablog.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from vscode-hatenablog!');
+		if (result.status === 'cancelled') {
+			return;
+		}
+
+		if (result.status === 'error') {
+			vscode.window.showErrorMessage(result.message);
+			return;
+		}
+
+		try {
+			const fullRange = new vscode.Range(
+				editor.document.positionAt(0),
+				editor.document.positionAt(editor.document.getText().length),
+			);
+
+			await editor.edit(editBuilder => {
+				editBuilder.replace(fullRange, result.newContent);
+			});
+			await editor.document.save();
+
+			vscode.window.showInformationMessage(`はてなブログに${result.action}しました: ${result.title}`);
+		} catch (error: unknown) {
+			const message = error instanceof Error ? error.message : String(error);
+			vscode.window.showErrorMessage(`投稿に失敗しました: ${message}`);
+		}
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

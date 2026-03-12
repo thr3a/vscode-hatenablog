@@ -1,15 +1,15 @@
 import * as assert from 'assert';
-
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
 import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
+import { activate } from '../extension';
 
 suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
-
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
+	test('registers hatenablog.post command', async () => {
+		const context = { subscriptions: [] as vscode.Disposable[] } as unknown as vscode.ExtensionContext;
+		activate(context);
+		const commands = await vscode.commands.getCommands(true);
+		assert.ok(commands.includes('hatenablog.post'));
+		for (const d of context.subscriptions) {
+			d.dispose();
+		}
 	});
 });
