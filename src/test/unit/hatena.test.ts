@@ -37,6 +37,23 @@ content`;
     assert.strictEqual(parsed.body, '# body\ncontent');
   });
 
+  test('parseFrontMatter: draft_flag が yes の場合は下書きとして扱う', () => {
+    const text = `---
+title: "test"
+draft_flag: yes
+---
+# body
+content`;
+
+    const parsed = parseFrontMatter(text);
+
+    assert.deepStrictEqual(parsed.frontMatter, {
+      title: 'test',
+      draft_flag: true
+    });
+    assert.strictEqual(parsed.body, '# body\ncontent');
+  });
+
   test('parseFrontMatter: メタデータが存在しない場合は本文をそのまま返す', () => {
     const body = '# title\ncontent';
     assert.deepStrictEqual(parseFrontMatter(body), { frontMatter: null, body });
@@ -94,6 +111,7 @@ content`;
   <category term="ubuntu" />
   <category term="linux" />
   <link rel="edit" href="https://blog.hatena.ne.jp/thr3a/thr3a.hatenablog.com/atom/entry/17179246901363868670"/>
+  <link rel="alternate" type="text/html" href="https://thr3a.hatenablog.com/entry/2026/03/11/234727"/>
   <app:control>
     <app:draft>no</app:draft>
   </app:control>
@@ -105,7 +123,8 @@ content`;
       published: '2026-03-11T23:47:27+09:00',
       updated: '2026-03-11T23:48:27+09:00',
       categories: ['ubuntu', 'linux'],
-      draft: false
+      draft: false,
+      url: 'https://thr3a.hatenablog.com/entry/2026/03/11/234727'
     });
   });
 });

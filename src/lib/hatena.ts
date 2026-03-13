@@ -15,6 +15,7 @@ export interface AtomEntry {
   updated: string;
   categories: string[];
   draft: boolean;
+  url: string;
 }
 
 export function parseFrontMatter(text: string): { frontMatter: FrontMatter | null; body: string } {
@@ -49,7 +50,7 @@ export function parseFrontMatter(text: string): { frontMatter: FrontMatter | nul
         fm.updated_at = stripWrappingQuotes(value);
         break;
       case 'draft_flag':
-        fm.draft_flag = value === 'true';
+        fm.draft_flag = parseDraftFlag(value);
         break;
       case 'categories':
         fm.categories = parseCategories(value);
@@ -131,6 +132,7 @@ export function parseResponseXml(xml: string): AtomEntry {
 
   const draftMatch = xml.match(/<app:draft>(\w+)<\/app:draft>/);
   const editLinkMatch = xml.match(/rel="edit"\s+href="[^"]*\/entry\/([^"]+)"/);
+  const alternateLinkMatch = xml.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"[^>]*\/?>/);
 
   return {
     id: editLinkMatch ? editLinkMatch[1] : getTag('id'),
@@ -138,12 +140,18 @@ export function parseResponseXml(xml: string): AtomEntry {
     published: getTag('published'),
     updated: getTag('updated'),
     categories,
-    draft: draftMatch ? draftMatch[1] === 'yes' : false
+    draft: draftMatch ? draftMatch[1] === 'yes' : false,
+    url: alternateLinkMatch ? alternateLinkMatch[1] : ''
   };
 }
 
 function stripWrappingQuotes(value: string): string {
   return value.replace(/^"|"$/g, '');
+}
+
+function parseDraftFlag(value: string): boolean {
+  const normalized = stripWrappingQuotes(value).trim().toLowerCase();
+  return normalized === 'true' || normalized === 'yes';
 }
 
 function parseCategories(value: string): string[] {

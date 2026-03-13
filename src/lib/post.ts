@@ -25,6 +25,7 @@ export type PostMarkdownResult =
       status: 'success';
       action: '投稿' | '更新';
       title: string;
+      url: string;
       newContent: string;
     };
 
@@ -63,6 +64,7 @@ export async function postMarkdownDocument(
       status: 'success',
       action: frontMatter?.id ? '更新' : '投稿',
       title: entry.title || metadata.title,
+      url: entry.url,
       newContent: buildUpdatedMarkdown({
         entry,
         metadata,

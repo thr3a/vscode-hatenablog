@@ -14,6 +14,7 @@ class RecordingClient implements HatenaClient {
       updated: string;
       categories: string[];
       draft: boolean;
+      url: string;
     }
   ) {}
 
@@ -53,7 +54,8 @@ suite('post workflow', () => {
       published: '2026-03-11T23:47:27+09:00',
       updated: '2026-03-11T23:47:27+09:00',
       categories: ['ubuntu'],
-      draft: false
+      draft: false,
+      url: 'https://thr3a.hatenablog.com/entry/2026/03/11/234727'
     });
 
     const result = await postMarkdownDocument(
@@ -76,6 +78,7 @@ suite('post workflow', () => {
       status: 'success',
       action: '投稿',
       title: 'Test',
+      url: 'https://thr3a.hatenablog.com/entry/2026/03/11/234727',
       newContent: `---
 id: 1
 title: "Test"
@@ -97,7 +100,8 @@ body`
       published: '2026-03-11T23:47:27+09:00',
       updated: '2026-03-11T23:48:27+09:00',
       categories: ['ubuntu', 'linux'],
-      draft: false
+      draft: false,
+      url: 'https://thr3a.hatenablog.com/entry/2026/03/11/234827'
     });
 
     const result = await postMarkdownDocument(
@@ -130,6 +134,7 @@ body`,
       status: 'success',
       action: '投稿',
       title: 'Posted Title',
+      url: 'https://thr3a.hatenablog.com/entry/2026/03/11/234827',
       newContent: `---
 id: 17179246901363868670
 title: "Posted Title"
@@ -151,7 +156,8 @@ body`
       published: '',
       updated: '2026-03-12T00:00:00+09:00',
       categories: [],
-      draft: false
+      draft: false,
+      url: 'https://thr3a.hatenablog.com/entry/2026/03/12/000000'
     });
 
     const result = await postMarkdownDocument(
@@ -185,6 +191,7 @@ body`,
       status: 'success',
       action: '更新',
       title: 'New Title',
+      url: 'https://thr3a.hatenablog.com/entry/2026/03/12/000000',
       newContent: `---
 id: 17179246901363868670
 title: "New Title"

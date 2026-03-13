@@ -48,6 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
       await editor.document.save();
 
       vscode.window.showInformationMessage(`はてなブログに${result.action}しました: ${result.title}`);
+      await openEntryUrl(result.url);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       vscode.window.showErrorMessage(`投稿に失敗しました: ${message}`);
@@ -58,3 +59,11 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {}
+
+async function openEntryUrl(url: string): Promise<void> {
+  if (process.platform !== 'darwin' || !url) {
+    return;
+  }
+
+  await vscode.env.openExternal(vscode.Uri.parse(url));
+}
