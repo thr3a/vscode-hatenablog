@@ -40,33 +40,29 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "pretest:unit": "npm run compile && npm run lint",
-    "lint": "eslint src",
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "dev": "tsc -watch -p ./",
+    "pretest": "npm run build && npm run lint",
+    "pretest:unit": "npm run build && npm run lint",
+    "lint": "biome check --write --unsafe ./src && npx tsc --noEmit",
     "test:unit": "mocha --ui tdd \"out/test/unit/**/*.test.js\"",
     "test:integration": "vscode-test",
     "test": "npm run test:unit && npm run test:integration"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "@types/vscode": "^1.100.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "eslint": "^9.39.3",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1"
+    "typescript": "^5.9.3"
   },
   "imports": {
     "#*": {
       "types": "./src/*.ts",
       "default": "./out/*.js"
     }
-  },
-  "dependencies": {
-    "biome": "^0.3.3"
   }
 }
