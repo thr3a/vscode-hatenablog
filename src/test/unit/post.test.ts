@@ -1,7 +1,7 @@
 import * as assert from 'node:assert';
 
 import type { HatenaClient, SubmitEntryRequest } from '#lib/client';
-import { postMarkdownDocument, validatePostInput } from '#lib/post';
+import { buildUpdatedMarkdown, postMarkdownDocument, validatePostInput } from '#lib/post';
 
 class RecordingClient implements HatenaClient {
   public readonly requests: SubmitEntryRequest[] = [];
@@ -204,6 +204,55 @@ draft_flag: false
 # New Title
 body`
     });
+  });
+
+  test('postMarkdownDocument: entry.titleが空の場合はフロントマターのタイトルを使用する', async () => {
+    const client = new RecordingClient({
+      id: '999',
+      title: '',
+      published: '2026-03-14T10:00:00+09:00',
+      updated: '2026-03-14T10:00:00+09:00',
+      categories: [],
+      draft: false,
+      url: 'https://example.com/entry'
+    });
+
+    const result = await postMarkdownDocument(
+      {
+        languageId: 'markdown',
+        fullText: `---
+title: "My Title"
+---
+# My Title
+body`,
+        config: { hatenaId: 'thr3a', blogId: 'thr3a.hatenablog.com', apiKey: 'secret' }
+      },
+      { client, now: () => new Date('2026-03-14T01:00:00.000Z') }
+    );
+
+    assert.strictEqual(result.status, 'success');
+    if (result.status === 'success') {
+      assert.strictEqual(result.title, 'My Title');
+    }
+  });
+
+  test('buildUpdatedMarkdown: publishedが空の場合はnowの日付をdateとして使用する', () => {
+    const result = buildUpdatedMarkdown({
+      entry: {
+        id: '1',
+        title: 'Title',
+        published: '',
+        updated: '',
+        categories: [],
+        draft: false,
+        url: ''
+      },
+      metadata: { title: 'Title', categories: [], draft_flag: false },
+      body: '# Title\nbody',
+      now: new Date('2026-03-14T01:00:00.000Z')
+    });
+
+    assert.match(result, /^date: "2026-03-14"$/m);
   });
 
   test('postMarkdownDocument: クライアントエラーをユーザー向けメッセージとして返す', async () => {

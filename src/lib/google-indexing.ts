@@ -60,11 +60,8 @@ const isGoogleServiceAccountKey = (value: unknown): value is GoogleServiceAccoun
   if (typeof value !== 'object' || value === null) {
     return false;
   }
-
-  const clientEmail = Reflect.get(value, 'client_email');
-  const privateKey = Reflect.get(value, 'private_key');
-
-  return typeof clientEmail === 'string' && typeof privateKey === 'string';
+  const obj = value as Record<string, unknown>;
+  return typeof obj.client_email === 'string' && typeof obj.private_key === 'string';
 };
 
 const loadServiceAccountKey = async (

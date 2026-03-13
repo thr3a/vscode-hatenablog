@@ -90,6 +90,73 @@ suite('Google Indexing API', () => {
     assert.strictEqual(readFileCalled, false);
   });
 
+  test('publishUrlToGoogleIndexingApi: URLが空の場合は何もしない', async () => {
+    let readFileCalled = false;
+
+    await publishUrlToGoogleIndexingApi(
+      { credentialsPath: '/tmp/creds.json', url: '' },
+      {
+        readFile: async () => {
+          readFileCalled = true;
+          return '';
+        },
+        isAbsolutePath: () => true,
+        createJwtClient: () => ({ authorize: async () => ({ access_token: 'token' }) }),
+        fetchImpl: async () => new Response('', { status: 200 })
+      }
+    );
+
+    assert.strictEqual(readFileCalled, false);
+  });
+
+  test('publishUrlToGoogleIndexingApi: 認証情報JSONが不正な場合はエラーをスローする', async () => {
+    await assert.rejects(
+      () =>
+        publishUrlToGoogleIndexingApi(
+          { credentialsPath: '/tmp/creds.json', url: 'https://example.com/' },
+          {
+            readFile: async () => JSON.stringify({ not_client_email: 'x' }),
+            isAbsolutePath: () => true,
+            createJwtClient: () => ({ authorize: async () => ({ access_token: 'token' }) }),
+            fetchImpl: async () => new Response('', { status: 200 })
+          }
+        ),
+      /Google認証情報JSONの形式が不正です/
+    );
+  });
+
+  test('publishUrlToGoogleIndexingApi: アクセストークン取得失敗時はエラーをスローする', async () => {
+    await assert.rejects(
+      () =>
+        publishUrlToGoogleIndexingApi(
+          { credentialsPath: '/tmp/creds.json', url: 'https://example.com/' },
+          {
+            readFile: async () => JSON.stringify({ client_email: 'a@b.com', private_key: 'key' }),
+            isAbsolutePath: () => true,
+            createJwtClient: () => ({ authorize: async () => ({ access_token: null }) }),
+            fetchImpl: async () => new Response('', { status: 200 })
+          }
+        ),
+      /アクセストークン取得に失敗しました/
+    );
+  });
+
+  test('publishUrlToGoogleIndexingApi: APIが200以外を返した場合はエラーをスローする', async () => {
+    await assert.rejects(
+      () =>
+        publishUrlToGoogleIndexingApi(
+          { credentialsPath: '/tmp/creds.json', url: 'https://example.com/' },
+          {
+            readFile: async () => JSON.stringify({ client_email: 'a@b.com', private_key: 'key' }),
+            isAbsolutePath: () => true,
+            createJwtClient: () => ({ authorize: async () => ({ access_token: 'token' }) }),
+            fetchImpl: async () => new Response('Forbidden', { status: 403 })
+          }
+        ),
+      /403/
+    );
+  });
+
   test('notifyGoogleIndexingIfConfigured: 設定がなければ何もしない', async () => {
     let publishCalled = false;
     let logCalled = false;

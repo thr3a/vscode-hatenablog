@@ -54,6 +54,26 @@ content`;
     assert.strictEqual(parsed.body, '# body\ncontent');
   });
 
+  test('parseFrontMatter: draft_flag が true の場合も下書きとして扱う', () => {
+    const text = `---
+title: "test"
+draft_flag: true
+---
+body`;
+    const parsed = parseFrontMatter(text);
+    assert.strictEqual(parsed.frontMatter?.draft_flag, true);
+  });
+
+  test('parseFrontMatter: カテゴリが空配列の場合は空配列を返す', () => {
+    const text = `---
+title: "test"
+categories: []
+---
+body`;
+    const parsed = parseFrontMatter(text);
+    assert.deepStrictEqual(parsed.frontMatter?.categories, []);
+  });
+
   test('parseFrontMatter: メタデータが存在しない場合は本文をそのまま返す', () => {
     const body = '# title\ncontent';
     assert.deepStrictEqual(parseFrontMatter(body), { frontMatter: null, body });
@@ -99,6 +119,33 @@ content`;
     assert.match(xml, /<category term="ubuntu" \/>/);
     assert.doesNotMatch(xml, /<category term="" \/>/);
     assert.match(xml, /<app:draft>yes<\/app:draft>/);
+  });
+
+  test('buildEntryXml: updatedAtなしの場合はupdated要素を含まない', () => {
+    const xml = buildEntryXml({
+      title: 'Title',
+      content: 'body',
+      categories: [],
+      draft: false
+    });
+
+    assert.doesNotMatch(xml, /<updated>/);
+    assert.match(xml, /<app:draft>no<\/app:draft>/);
+  });
+
+  test('buildFrontMatter: draft_flag: true のときに正しく出力する', () => {
+    const built = buildFrontMatter({
+      id: '1',
+      title: 'draft post',
+      date: '2026-03-14',
+      categories: [],
+      published_at: '',
+      updated_at: '',
+      draft_flag: true
+    });
+
+    assert.match(built, /^draft_flag: true$/m);
+    assert.match(built, /^categories: \[\]$/m);
   });
 
   test('parseResponseXml: editリンクからエントリIDを優先的に取得する', () => {
