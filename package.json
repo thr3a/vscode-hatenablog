@@ -29,12 +29,17 @@
         "hatenablog.blogId": {
           "type": "string",
           "default": "",
-          "description": "Blog ID (ブログドメイン e.g. example.hatenablog.com)"
+          "description": "Blog ID、ブログドメイン(例:example.hatenablog.com) 独自ドメインの場合もデフォルトのブログIDを指定する"
         },
         "hatenablog.apiKey": {
           "type": "string",
           "default": "",
           "description": "API Key"
+        },
+        "hatenablog.google_credentials_path": {
+          "type": "string",
+          "default": "",
+          "description": "Google Indexing API 用サービスアカウントJSONの絶対パス"
         }
       }
     }
@@ -64,5 +69,8 @@
       "types": "./src/*.ts",
       "default": "./out/*.js"
     }
+  },
+  "dependencies": {
+    "googleapis": "^171.4.0"
   }
 }

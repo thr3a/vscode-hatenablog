@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { createHatenaClient } from '#lib/client';
+import { notifyGoogleIndexingIfConfigured, publishUrlToGoogleIndexingApi } from '#lib/google-indexing';
 import { postMarkdownDocument } from '#lib/post';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -46,6 +47,19 @@ export function activate(context: vscode.ExtensionContext) {
         editBuilder.replace(fullRange, result.newContent);
       });
       await editor.document.save();
+      await notifyGoogleIndexingIfConfigured(
+        {
+          credentialsPath: config.get<string>('google_credentials_path', ''),
+          url: result.url
+        },
+        {
+          publishUrl: publishUrlToGoogleIndexingApi,
+          logError: (_message: string, error: unknown) => {
+            const msg = error instanceof Error ? error.message : String(error);
+            vscode.window.showWarningMessage(`Google Indexing API への送信に失敗しました: ${msg}`);
+          }
+        }
+      );
 
       vscode.window.showInformationMessage(`はてなブログに${result.action}しました: ${result.title}`);
       await openEntryUrl(result.url);
