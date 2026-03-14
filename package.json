@@ -1,10 +1,10 @@
 {
   "name": "vscode-hatenablog",
   "displayName": "vscode-hatenablog",
-  "description": "test",
+  "description": "VSCodeからはてなブログへMarkdownファイルを直接投稿できる拡張機能",
   "license": "MIT",
   "publisher": "thr3a",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.100.0"
   },
