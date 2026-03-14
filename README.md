@@ -12,7 +12,7 @@ VSCodeからはてなブログへMarkdownファイルを直接投稿できる拡
 
 ## 使い方
 
-1. Markdownファイルを開く
+1. Markdownファイルを作成して記事を書く。
 2. コマンドパレット (`Cmd+Shift+P`) から `Post to HatenaBlog` を実行
 3. 投稿後、FrontMatterが自動更新されファイルが保存される
 
@@ -34,12 +34,12 @@ draft_flag: false
 
 ## 設定
 
-| 設定キー | 型 | 必須 | 説明 |
-|---|---|---|---|
-| `hatenablog.hatenaId` | string | yes | はてなID |
-| `hatenablog.blogId` | string | yes | ブログID（例: `example.hatenablog.com`）。独自ドメインの場合もデフォルトのブログIDを指定 |
-| `hatenablog.apiKey` | string | yes | AtomPub APIキー（はてなブログの詳細設定ページで確認） |
-| `hatenablog.google_credentials_path` | string | no | Google Indexing API用サービスアカウントJSONの絶対パス |
+| 設定キー | 必須 | 説明 |
+|---|---|---|
+| `hatenablog.hatenaId` | ○ | はてなID |
+| `hatenablog.blogId` | ○ | ブログID（例: example.hatenablog.com）。独自ドメインの場合もデフォルトのブログIDを指定 |
+| `hatenablog.apiKey` | ○ | AtomPub APIキー（はてなブログの詳細設定ページで確認） |
+| `hatenablog.google_credentials_path` |  | Google Indexing API用サービスアカウントJSONの絶対パス |
 
 `hatenablog.google_credentials_path` はGoogle Indexing APIを使用しない場合は省略可能
 
