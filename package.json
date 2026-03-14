@@ -56,7 +56,7 @@
     "test:unit": "mocha --ui tdd \"out/test/unit/**/*.test.js\"",
     "test:integration": "vscode-test",
     "test": "npm run test:unit && npm run test:integration",
-    "package": "@vscode/vsce package"
+    "package": "vsce package --allow-missing-repository --skip-license"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
