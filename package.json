@@ -4,7 +4,7 @@
   "description": "VSCodeからはてなブログへMarkdownファイルを直接投稿できる拡張機能",
   "license": "MIT",
   "publisher": "thr3a",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engines": {
     "vscode": "^1.100.0"
   },
