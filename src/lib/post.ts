@@ -55,7 +55,7 @@ export async function postMarkdownDocument(
       title: metadata.title,
       content: body,
       categories: metadata.categories,
-      updatedAt: metadata.updated_at,
+      updatedAt: frontMatter?.id ? undefined : metadata.updated_at,
       draft: metadata.draft_flag,
       entryId: frontMatter?.id
     });

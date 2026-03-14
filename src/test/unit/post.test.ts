@@ -185,7 +185,7 @@ body`,
     assert.strictEqual(client.requests.length, 1);
     assert.strictEqual(client.requests[0].entryId, '17179246901363868670');
     assert.deepStrictEqual(client.requests[0].categories, ['refactor']);
-    assert.strictEqual(client.requests[0].updatedAt, '2026-03-11T12:00:00+09:00');
+    assert.strictEqual(client.requests[0].updatedAt, undefined);
     assert.strictEqual(client.requests[0].draft, true);
     assert.deepStrictEqual(result, {
       status: 'success',
