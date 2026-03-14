@@ -3,6 +3,7 @@
   "displayName": "vscode-hatenablog",
   "description": "test",
   "license": "MIT",
+  "publisher": "thr3a",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.100.0"
