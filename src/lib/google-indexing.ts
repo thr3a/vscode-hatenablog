@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { google } from 'googleapis';
+import { JWT } from 'google-auth-library';
 
 type GoogleServiceAccountKey = {
   client_email: string;
@@ -36,7 +36,7 @@ const GOOGLE_INDEXING_SCOPE = 'https://www.googleapis.com/auth/indexing';
 const GOOGLE_INDEXING_ENDPOINT = 'https://indexing.googleapis.com/v3/urlNotifications:publish';
 
 const createDefaultJwtClient = (params: { email: string; key: string; scopes: string[] }): GoogleJwtClient =>
-  new google.auth.JWT({
+  new JWT({
     email: params.email,
     key: params.key,
     scopes: params.scopes

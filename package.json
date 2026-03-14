@@ -47,9 +47,9 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run build",
-    "build": "tsc -p ./",
-    "dev": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run build -- --production",
+    "build": "tsc && node esbuild.js",
+    "dev": "node esbuild.js --watch",
     "pretest": "npm run build && npm run lint",
     "pretest:unit": "npm run build && npm run lint",
     "lint": "biome check --write --unsafe ./src && npx tsc --noEmit",
@@ -66,6 +66,8 @@
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.7.1",
+    "esbuild": "^0.27.4",
+    "google-auth-library": "^9.0.0",
     "typescript": "^5.9.3"
   },
   "imports": {
@@ -73,9 +75,6 @@
       "types": "./src/*.ts",
       "default": "./out/*.js"
     }
-  },
-  "dependencies": {
-    "googleapis": "^171.4.0"
   },
   "repository": {
     "type": "git",
