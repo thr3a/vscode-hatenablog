@@ -79,5 +79,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/thr3a/vscode-hatenablog.git"
+  },
+  "dependencies": {
+    "tsx": "^4.23.15"
   }
 }
